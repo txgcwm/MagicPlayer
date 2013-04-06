@@ -1,0 +1,313 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MagicPlayer</class>
+ <widget class="QMainWindow" name="MagicPlayer">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>376</width>
+    <height>384</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MagicPlayer</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true"/>
+  </property>
+  <widget class="QWidget" name="centralWidget">
+   <layout class="QGridLayout" name="gridLayout" rowstretch="1,0,0" rowminimumheight="0,10,10">
+    <property name="margin">
+     <number>0</number>
+    </property>
+    <property name="spacing">
+     <number>0</number>
+    </property>
+    <item row="0" column="0">
+     <widget class="QFrame" name="videoFrame">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color:black;</string>
+      </property>
+      <property name="frameShape">
+       <enum>QFrame::StyledPanel</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Raised</enum>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="0">
+     <layout class="QHBoxLayout" name="HProgressLayout">
+      <item>
+       <widget class="QLabel" name="startTimeLabel">
+        <property name="text">
+         <string>--:--</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QSlider" name="progressSlider">
+        <property name="maximum">
+         <number>200</number>
+        </property>
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="endTimeLabel">
+        <property name="text">
+         <string>--:--</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item row="2" column="0">
+     <layout class="QHBoxLayout" name="HControlLayout">
+      <item>
+       <widget class="QPushButton" name="playButton">
+        <property name="text">
+         <string>Play</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="stopButton">
+        <property name="text">
+         <string>Stop</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <spacer name="horizontalSpacer">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item>
+       <widget class="QSlider" name="volumeSlider">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="maximum">
+         <number>100</number>
+        </property>
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menuBar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>376</width>
+     <height>25</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menu_Media">
+    <property name="title">
+     <string>&amp;Media</string>
+    </property>
+    <addaction name="action_Open_File"/>
+    <addaction name="separator"/>
+    <addaction name="action_Quit"/>
+   </widget>
+   <widget class="QMenu" name="menuPlayBack">
+    <property name="title">
+     <string>&amp;Playback</string>
+    </property>
+    <addaction name="action_Play"/>
+    <addaction name="action_Stop"/>
+    <addaction name="action_Previous"/>
+    <addaction name="action_Next"/>
+    <addaction name="separator"/>
+    <addaction name="action_Jump_Forward"/>
+    <addaction name="action_Jump_Backward"/>
+    <addaction name="action_Jump_Specified_Time"/>
+   </widget>
+   <widget class="QMenu" name="menuAudio">
+    <property name="title">
+     <string>&amp;Audio</string>
+    </property>
+    <addaction name="action_Increase_Volume"/>
+    <addaction name="action_Decrease_Volume"/>
+    <addaction name="action_Mute"/>
+   </widget>
+   <widget class="QMenu" name="menuVideo">
+    <property name="title">
+     <string>&amp;Video</string>
+    </property>
+    <addaction name="action_Fullscreen"/>
+    <addaction name="action_Always_On_Top"/>
+    <addaction name="action_Always_Fit_Window"/>
+   </widget>
+   <widget class="QMenu" name="menu_Tools">
+    <property name="title">
+     <string>&amp;Tools</string>
+    </property>
+    <addaction name="action_Plugins_And_Extensions"/>
+   </widget>
+   <widget class="QMenu" name="menu_Help">
+    <property name="title">
+     <string>&amp;Help</string>
+    </property>
+    <addaction name="action_About"/>
+   </widget>
+   <addaction name="menu_Media"/>
+   <addaction name="menuPlayBack"/>
+   <addaction name="menuAudio"/>
+   <addaction name="menuVideo"/>
+   <addaction name="menu_Tools"/>
+   <addaction name="menu_Help"/>
+  </widget>
+  <action name="action_Open_File">
+   <property name="text">
+    <string>&amp;Open File</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+O</string>
+   </property>
+  </action>
+  <action name="action_Quit">
+   <property name="text">
+    <string>&amp;Quit</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Q</string>
+   </property>
+  </action>
+  <action name="action_Play">
+   <property name="text">
+    <string>&amp;Play</string>
+   </property>
+   <property name="shortcut">
+    <string>Space</string>
+   </property>
+  </action>
+  <action name="action_Stop">
+   <property name="text">
+    <string>&amp;Stop</string>
+   </property>
+  </action>
+  <action name="action_Previous">
+   <property name="text">
+    <string>P&amp;revious</string>
+   </property>
+  </action>
+  <action name="action_Next">
+   <property name="text">
+    <string>&amp;Next</string>
+   </property>
+  </action>
+  <action name="action_Jump_Forward">
+   <property name="text">
+    <string>Jump &amp;Forward</string>
+   </property>
+   <property name="shortcut">
+    <string>Right</string>
+   </property>
+  </action>
+  <action name="action_Jump_Backward">
+   <property name="text">
+    <string>Jump &amp;Backward</string>
+   </property>
+   <property name="shortcut">
+    <string>Left</string>
+   </property>
+  </action>
+  <action name="action_Jump_Specified_Time">
+   <property name="text">
+    <string>Jump &amp;Specified Time</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+T</string>
+   </property>
+  </action>
+  <action name="action_Increase_Volume">
+   <property name="text">
+    <string>&amp;Increase Volume</string>
+   </property>
+   <property name="shortcut">
+    <string>Up</string>
+   </property>
+  </action>
+  <action name="action_Decrease_Volume">
+   <property name="text">
+    <string>&amp;Decrease Volume</string>
+   </property>
+   <property name="shortcut">
+    <string>Down</string>
+   </property>
+  </action>
+  <action name="action_Mute">
+   <property name="text">
+    <string>&amp;Mute</string>
+   </property>
+  </action>
+  <action name="action_Fullscreen">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>&amp;Fullscreen</string>
+   </property>
+  </action>
+  <action name="action_Always_On_Top">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Always On &amp;Top</string>
+   </property>
+  </action>
+  <action name="action_Always_Fit_Window">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Always Fit &amp;Window</string>
+   </property>
+  </action>
+  <action name="action_Plugins_And_Extensions">
+   <property name="text">
+    <string>&amp;Plugins and Extensions</string>
+   </property>
+  </action>
+  <action name="action_About">
+   <property name="text">
+    <string>&amp;About</string>
+   </property>
+  </action>
+ </widget>
+ <layoutdefault spacing="6" margin="11"/>
+ <resources/>
+ <connections/>
+</ui>
