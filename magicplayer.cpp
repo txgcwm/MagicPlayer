@@ -43,36 +43,36 @@ MagicPlayer::MagicPlayer(QWidget *parent)
     connect(ui->action_Play, SIGNAL(triggered()), this, SLOT(videoPlay()));
     connect(ui->action_Stop, SIGNAL(triggered()), this, SLOT(videoPlay()));
 
-    connect(ui->action_Jump_Forward,SIGNAL(triggered()),this,SLOT(actionForward()));
-    connect(ui->action_Jump_Backward,SIGNAL(triggered()),this,SLOT(actionBackward()));
-    connect(ui->action_Jump_Specified_Time,SIGNAL(triggered()),this,SLOT(actionSpecified()));
+    connect(ui->action_Jump_Forward, SIGNAL(triggered()), this, SLOT(actionForward()));
+    connect(ui->action_Jump_Backward, SIGNAL(triggered()), this, SLOT(actionBackward()));
+    connect(ui->action_Jump_Specified_Time, SIGNAL(triggered()), this, SLOT(actionSpecified()));
 
-    connect(ui->action_Always_On_Top,SIGNAL(triggered(bool)),this,SLOT(actionOnTop(bool)));
-    connect(ui->action_Always_Fit_Window,SIGNAL(triggered(bool)),this,SLOT(actionFitWindow(bool)));
-    connect(ui->action_Fullscreen,SIGNAL(triggered(bool)),this,SLOT(actionFullscreen(bool)));
+    connect(ui->action_Always_On_Top, SIGNAL(triggered(bool)), this, SLOT(actionOnTop(bool)));
+    connect(ui->action_Always_Fit_Window, SIGNAL(triggered(bool)), this, SLOT(actionFitWindow(bool)));
+    connect(ui->action_Fullscreen, SIGNAL(triggered(bool)), this, SLOT(actionFullscreen(bool)));
 
-    connect(ui->action_About,SIGNAL(triggered()),this,SLOT(actionAbout()));
+    connect(ui->action_About, SIGNAL(triggered()), this, SLOT(actionAbout()));
 
-    connect(ui->action_Quit,SIGNAL(triggered()),this,SLOT(close()));
-    connect(ui->action_Open_File,SIGNAL(triggered()),this,SLOT(actionOpen()));
+    connect(ui->action_Quit, SIGNAL(triggered()), this, SLOT(close()));
+    connect(ui->action_Open_File, SIGNAL(triggered()), this, SLOT(actionOpen()));
 
-    //connect(ui->progressSlider,SIGNAL(sliderMoved(int)),this,SLOT(updateProgress(int)));
-    connect(ui->progressSlider,SIGNAL(valueChanged(int)),this,SLOT(updateProgress(int)));
-    connect(ui->volumeSlider,SIGNAL(valueChanged(int)),this,SLOT(updateVolume(int)));
+    //connect(ui->progressSlider, SIGNAL(sliderMoved(int)), this, SLOT(updateProgress(int)));
+    connect(ui->progressSlider, SIGNAL(valueChanged(int)), this, SLOT(updateProgress(int)));
+    connect(ui->volumeSlider, SIGNAL(valueChanged(int)), this, SLOT(updateVolume(int)));
     //libvlc_event_manager_t *emp=libvlc_media_player_event_manager(mp);
     //ui->gridLayout->setGeometry(QRect(0,0,this->width(),this->height()));
     //libvlc_event_attach(emp,libvlc_MediaPlayerPlaying,updateSize,this);
 
-    connect(ui->action_Increase_Volume,SIGNAL(triggered()),this,SLOT(actionIncreaseVolume()));
-    connect(ui->action_Decrease_Volume,SIGNAL(triggered()),this,SLOT(actionDecreaseVolume()));
-    connect(ui->action_Mute,SIGNAL(triggered()),this,SLOT(actionMute()));
+    connect(ui->action_Increase_Volume, SIGNAL(triggered()), this, SLOT(actionIncreaseVolume()));
+    connect(ui->action_Decrease_Volume, SIGNAL(triggered()), this, SLOT(actionDecreaseVolume()));
+    connect(ui->action_Mute, SIGNAL(triggered()), this, SLOT(actionMute()));
 }
 
 MagicPlayer::~MagicPlayer()
 {
     libvlc_media_player_release(mp);  /* Free the media_player */
 
-    libvlc_release (inst);
+    libvlc_release(inst);
     delete ui;
 }
 
@@ -86,8 +86,8 @@ void MagicPlayer::resizeEvent(QResizeEvent *event)
 
 void MagicPlayer::videoPlay()
 {
-    if(mp!=NULL) {
-        if(getplayStatus()==1) {
+    if(mp != NULL) {
+        if(getplayStatus() == 1) {
             libvlc_media_player_play (mp);
             setplayStatus(0);
             //wait for video loading ,or the resize will fail
@@ -119,7 +119,7 @@ int MagicPlayer::getplayStatus()
 
 void MagicPlayer::windowResize()
 {
-    if(mp!=NULL) {
+    if(mp != NULL) {
         unsigned int width,height;
         libvlc_video_get_size(mp,0,&width,&height);
         this->resize(width,height);
@@ -130,7 +130,7 @@ void MagicPlayer::windowResize()
 
 void MagicPlayer::updateProgress(int pos)
 {
-    if((mp!=NULL) && (libvlc_media_player_is_playing(mp)==1)) {
+    if((mp != NULL) && (libvlc_media_player_is_playing(mp) == 1)) {
         float num=(float)pos/(float)ui->progressSlider->maximum();
         libvlc_media_player_set_position(mp,num);
     }
@@ -140,7 +140,7 @@ void MagicPlayer::updateProgress(int pos)
 
 void MagicPlayer::updateVolume(int pos)
 {
-    if((mp!=NULL) && (libvlc_media_player_is_playing(mp)==1)) {
+    if((mp != NULL) && (libvlc_media_player_is_playing(mp) == 1)) {
         int num=pos;
         libvlc_audio_set_volume(mp,num);
     }
@@ -150,9 +150,9 @@ void MagicPlayer::updateVolume(int pos)
 
 void MagicPlayer::updateInterface()
 {
-    if((mp!=NULL) && (libvlc_media_player_is_playing(mp)==1)) {
-        int videoPosition=libvlc_media_player_get_position(mp)*ui->progressSlider->maximum();
-        int volumePosition=libvlc_audio_get_volume(mp);
+    if((mp != NULL) && (libvlc_media_player_is_playing(mp) == 1)) {
+        int videoPosition = libvlc_media_player_get_position(mp)*ui->progressSlider->maximum();
+        int volumePosition = libvlc_audio_get_volume(mp);
 
         //ignore the valueChanged signal
         bool oldState=ui->progressSlider->blockSignals(true);
@@ -171,9 +171,9 @@ void MagicPlayer::updateInterface()
 
 void MagicPlayer::updatestartTime()
 {
-    if(mp!=NULL) {
+    if(mp != NULL) {
         QTime time;
-        time=time.addMSecs(libvlc_media_player_get_time(mp));
+        time = time.addMSecs(libvlc_media_player_get_time(mp));
         ui->startTimeLabel->setText(time.toString("hh:mm:ss"));
     }
 
@@ -182,9 +182,9 @@ void MagicPlayer::updatestartTime()
 
 void MagicPlayer::updateendTime()
 {
-    if(mp!=NULL) {
+    if(mp != NULL) {
         QTime time;
-        time=time.addMSecs(libvlc_media_player_get_length(mp)-libvlc_media_player_get_time(mp));
+        time = time.addMSecs(libvlc_media_player_get_length(mp)-libvlc_media_player_get_time(mp));
         ui->endTimeLabel->setText(time.toString("hh:mm:ss"));
     }
 
@@ -204,9 +204,9 @@ void MagicPlayer::actionIncreaseVolume()
 
 void MagicPlayer::actionDecreaseVolume()
 {
-    int value=ui->volumeSlider->value();
+    int value = ui->volumeSlider->value();
 
-    if(value>1) {
+    if(value > 1) {
         ui->volumeSlider->setValue(--value);
     }
 
@@ -222,10 +222,10 @@ void MagicPlayer::actionMute()
 
 void MagicPlayer::actionForward()
 {
-    int value=ui->progressSlider->value();
+    int value = ui->progressSlider->value();
 
-    if(value+ui->progressSlider->pageStep()<=ui->progressSlider->maximum()) {
-        ui->progressSlider->setValue(ui->progressSlider->pageStep()+value);
+    if(value + ui->progressSlider->pageStep() <= ui->progressSlider->maximum()) {
+        ui->progressSlider->setValue(ui->progressSlider->pageStep() + value);
     }
 
     return;
@@ -233,9 +233,9 @@ void MagicPlayer::actionForward()
 
 void MagicPlayer::actionBackward()
 {
-    int value=ui->progressSlider->value();
+    int value = ui->progressSlider->value();
 
-    if(value-ui->progressSlider->pageStep()>=0) {
+    if(value-ui->progressSlider->pageStep() >= 0) {
         ui->progressSlider->setValue(value-ui->progressSlider->pageStep());
 
     }
@@ -245,9 +245,9 @@ void MagicPlayer::actionBackward()
 
 void MagicPlayer::actionSpecified()
 {
-    if(mp!=NULL) {
+    if(mp != NULL) {
         bool ok;
-        int maxMinute=(int)(libvlc_media_player_get_length(mp)/(60*1000));
+        int maxMinute = (int)(libvlc_media_player_get_length(mp)/(60*1000));
         int minute=QInputDialog::getInt(this,
                                         tr("Input Time"), //dialog title
                                         tr("Please Specified the minutes you want to jump:\n(Max Value:")+QString::number(maxMinute)+tr(" min)"),
@@ -258,7 +258,6 @@ void MagicPlayer::actionSpecified()
                                         &ok);
         if(ok) {
             ui->progressSlider->setValue((float)minute/maxMinute*ui->progressSlider->maximum());
-
         }
     }
 
