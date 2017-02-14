@@ -1,44 +1,47 @@
-#include "magicplayer.h"
-#include "ui_magicplayer.h"
 #include <QResizeEvent>
-#include <QThread>
+#include <QTextStream>
 #include <QMessageBox>
 #include <QInputDialog>
 #include <QFileDialog>
+#include <QThread>
 #include <QString>
-#include <string>
-#include <sstream>
 #include <QTime>
-#include <iostream>
-#include <fstream>
 #include <QFile>
-#include <QTextStream>
+#include <iostream>
+#include <sstream>
+#include <fstream>
+#include <string>
 
-MagicPlayer::MagicPlayer(QWidget *parent) :
-    QMainWindow(parent),
-    ui(new Ui::MagicPlayer)
+#include "magicplayer.h"
+#include "ui_magicplayer.h"
+
+
+
+MagicPlayer::MagicPlayer(QWidget *parent)
+: QMainWindow(parent)
+, ui(new Ui::MagicPlayer)
 {
     ui->setupUi(this);
     setplayStatus(1);
 
-    inst=NULL;
-    mp=NULL;
-    /* Load the VLC engine */
-    inst = libvlc_new (0, NULL);
+    inst = NULL;
+    mp = NULL;
+
+    inst = libvlc_new(0, NULL); /* Load the VLC engine */
 
     //set the default size
-    this->resize(600,400);
+    this->resize(600, 400);
     ui->progressSlider->setMaximum(1000);
     ui->volumeSlider->setMaximum(100);
 
-    timer=new QTimer(this);
-    connect(timer,SIGNAL(timeout()),this,SLOT(updateInterface()));
+    timer = new QTimer(this);
+    connect(timer, SIGNAL(timeout()), this, SLOT(updateInterface()));
 
-    connect(ui->playButton,SIGNAL(clicked()),this,SLOT(videoPlay()));
-    connect(ui->stopButton,SIGNAL(clicked()),this,SLOT(videoStop()));
+    connect(ui->playButton, SIGNAL(clicked()), this, SLOT(videoPlay()));
+    connect(ui->stopButton, SIGNAL(clicked()), this, SLOT(videoStop()));
 
-    connect(ui->action_Play,SIGNAL(triggered()),this,SLOT(videoPlay()));
-    connect(ui->action_Stop,SIGNAL(triggered()),this,SLOT(videoPlay()));
+    connect(ui->action_Play, SIGNAL(triggered()), this, SLOT(videoPlay()));
+    connect(ui->action_Stop, SIGNAL(triggered()), this, SLOT(videoPlay()));
 
     connect(ui->action_Jump_Forward,SIGNAL(triggered()),this,SLOT(actionForward()));
     connect(ui->action_Jump_Backward,SIGNAL(triggered()),this,SLOT(actionBackward()));
@@ -67,8 +70,7 @@ MagicPlayer::MagicPlayer(QWidget *parent) :
 
 MagicPlayer::~MagicPlayer()
 {
-    /* Free the media_player */
-    libvlc_media_player_release (mp);
+    libvlc_media_player_release(mp);  /* Free the media_player */
 
     libvlc_release (inst);
     delete ui;
@@ -78,25 +80,25 @@ void MagicPlayer::resizeEvent(QResizeEvent *event)
 {
     //ui->gridLayout->setGeometry(QRect(0,0,this->width(),this->height()));
     //event->accept();
+
+    return;
 }
 
 void MagicPlayer::videoPlay()
 {
-    if(mp!=NULL)
-    {
-        if(getplayStatus()==1)
-        {
+    if(mp!=NULL) {
+        if(getplayStatus()==1) {
             libvlc_media_player_play (mp);
             setplayStatus(0);
             //wait for video loading ,or the resize will fail
             QTimer::singleShot(100,this,SLOT(windowResize()));
-        }
-        else
-        {
+        } else {
             libvlc_media_player_pause (mp);
             setplayStatus(1);
         }
     }
+
+    return;
 }
 
 void MagicPlayer::setplayStatus(int t)
@@ -114,38 +116,41 @@ int MagicPlayer::getplayStatus()
 //    if(event==1)
 
 //}
+
 void MagicPlayer::windowResize()
 {
-    if(mp!=NULL)
-    {
+    if(mp!=NULL) {
         unsigned int width,height;
         libvlc_video_get_size(mp,0,&width,&height);
         this->resize(width,height);
     }
+
+    return;
 }
 
 void MagicPlayer::updateProgress(int pos)
 {
-    if((mp!=NULL) && (libvlc_media_player_is_playing(mp)==1))
-    {
+    if((mp!=NULL) && (libvlc_media_player_is_playing(mp)==1)) {
         float num=(float)pos/(float)ui->progressSlider->maximum();
         libvlc_media_player_set_position(mp,num);
     }
+
+    return;
 }
 
 void MagicPlayer::updateVolume(int pos)
 {
-    if((mp!=NULL) && (libvlc_media_player_is_playing(mp)==1))
-    {
+    if((mp!=NULL) && (libvlc_media_player_is_playing(mp)==1)) {
         int num=pos;
         libvlc_audio_set_volume(mp,num);
     }
+
+    return;
 }
 
 void MagicPlayer::updateInterface()
 {
-    if((mp!=NULL) && (libvlc_media_player_is_playing(mp)==1))
-    {
+    if((mp!=NULL) && (libvlc_media_player_is_playing(mp)==1)) {
         int videoPosition=libvlc_media_player_get_position(mp)*ui->progressSlider->maximum();
         int volumePosition=libvlc_audio_get_volume(mp);
 
@@ -160,65 +165,87 @@ void MagicPlayer::updateInterface()
         updatestartTime();
         updateendTime();
     }
+
+    return;
 }
 
 void MagicPlayer::updatestartTime()
 {
-    if(mp!=NULL)
-    {
+    if(mp!=NULL) {
         QTime time;
         time=time.addMSecs(libvlc_media_player_get_time(mp));
         ui->startTimeLabel->setText(time.toString("hh:mm:ss"));
     }
+
+    return;
 }
 
 void MagicPlayer::updateendTime()
 {
-    if(mp!=NULL)
-    {
+    if(mp!=NULL) {
         QTime time;
         time=time.addMSecs(libvlc_media_player_get_length(mp)-libvlc_media_player_get_time(mp));
         ui->endTimeLabel->setText(time.toString("hh:mm:ss"));
     }
+
+    return;
 }
 
 void MagicPlayer::actionIncreaseVolume()
 {
-    int value=ui->volumeSlider->value();
-    if(value<ui->volumeSlider->maximum())
+    int value = ui->volumeSlider->value();
+
+    if(value < ui->volumeSlider->maximum()) {
         ui->volumeSlider->setValue(++value);
+    }
+
+    return;
 }
 
 void MagicPlayer::actionDecreaseVolume()
 {
     int value=ui->volumeSlider->value();
-    if(value>1)
+
+    if(value>1) {
         ui->volumeSlider->setValue(--value);
+    }
+
+    return;
 }
 
 void MagicPlayer::actionMute()
 {
     ui->volumeSlider->setValue(ui->volumeSlider->minimum());
+
+    return;
 }
 
 void MagicPlayer::actionForward()
 {
     int value=ui->progressSlider->value();
-    if(value+ui->progressSlider->pageStep()<=ui->progressSlider->maximum())
+
+    if(value+ui->progressSlider->pageStep()<=ui->progressSlider->maximum()) {
         ui->progressSlider->setValue(ui->progressSlider->pageStep()+value);
+    }
+
+    return;
 }
 
 void MagicPlayer::actionBackward()
 {
     int value=ui->progressSlider->value();
-    if(value-ui->progressSlider->pageStep()>=0)
+
+    if(value-ui->progressSlider->pageStep()>=0) {
         ui->progressSlider->setValue(value-ui->progressSlider->pageStep());
+
+    }
+
+    return;
 }
 
 void MagicPlayer::actionSpecified()
 {
-    if(mp!=NULL)
-    {
+    if(mp!=NULL) {
         bool ok;
         int maxMinute=(int)(libvlc_media_player_get_length(mp)/(60*1000));
         int minute=QInputDialog::getInt(this,
@@ -229,55 +256,72 @@ void MagicPlayer::actionSpecified()
                                         maxMinute, //max value
                                         1, //step value
                                         &ok);
-        if(ok)
+        if(ok) {
             ui->progressSlider->setValue((float)minute/maxMinute*ui->progressSlider->maximum());
+
+        }
     }
+
+    return;
 }
 
 void MagicPlayer::actionOnTop(bool t)
 {
-    if(t)
+    if(t) {
         setWindowFlags(Qt::WindowStaysOnTopHint);
-    else
+    } else {
         setWindowFlags(windowFlags()^Qt::WindowStaysOnTopHint);
+    }
+
     this->show();
+
+    return;
 }
 
 void MagicPlayer::actionFullscreen(bool t)
 {
-    if(t)
+    if(t) {
         setWindowState(Qt::WindowFullScreen);
-    else
+    } else {
         setWindowState(windowState()^Qt::WindowFullScreen);
+    }
+
     this->show();
+
+    return;
 }
 
 void MagicPlayer::actionFitWindow(bool t)
 {
-
+    return;
 }
 
 void MagicPlayer::actionAbout()
 {
     QString text;
     QFile fin("about.html");
-    if (!fin.open(QIODevice::ReadOnly | QIODevice::Text))
+
+    if (!fin.open(QIODevice::ReadOnly | QIODevice::Text)) {
         text=tr("<h2>MagicPlayer</h2><br />Version 1.0");
-    else
+    } else {
         text=QTextStream(&fin).readAll();
+    }
+
     fin.close();
-    QMessageBox::about(NULL,tr("About"),text);
+
+    QMessageBox::about(NULL, tr("About"), text);
+
+    return;
 }
 
 void MagicPlayer::actionOpen()
 {
-    if(mp!=NULL)
-    {
+    if(mp!=NULL) {
         videoStop();
     }
+
     QString path=QFileDialog::getOpenFileName(this,tr("Open File"),".",tr("Video Files(*.avi *.mkv *.mp4 *.ogg)"));
-    if(path.length()!=0)
-    {
+    if(path.length()!=0) {
         // Create a new item
         libvlc_media_t *m = libvlc_media_new_path (inst, path.toStdString().c_str());
         // Create a media player playing environement
@@ -287,6 +331,8 @@ void MagicPlayer::actionOpen()
         player_initialize(mp);
         videoPlay();
     }
+
+    return;
 }
 
 int MagicPlayer::player_initialize(libvlc_media_player_t *_mp)
@@ -300,15 +346,19 @@ int MagicPlayer::player_initialize(libvlc_media_player_t *_mp)
     libvlc_media_player_set_xwindow (_mp,ui->videoFrame->winId());
 #endif
     timer->start(100);
+
     return 0;
 }
 
 void MagicPlayer::videoStop()
 {
-    if(mp!=NULL)
-    {
-        libvlc_media_player_release (mp);
+    if(mp != NULL) {
+        libvlc_media_player_release(mp);
         setplayStatus(1);
-        mp=NULL;
+        mp = NULL;
     }
+
+    return;
 }
+
+

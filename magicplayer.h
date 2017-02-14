@@ -5,6 +5,8 @@
 #include <QTimer>
 #include <vlc/vlc.h>
 
+
+
 namespace Ui {
 class MagicPlayer;
 }
@@ -52,6 +54,7 @@ private slots:
 
     void actionAbout();
     void actionOpen();
+
 private:
     Ui::MagicPlayer *ui;
     libvlc_instance_t * inst;

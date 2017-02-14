@@ -9,6 +9,7 @@ QT       += core gui
 TARGET = MagicPlayer
 TEMPLATE = app
 
+greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 SOURCES += main.cpp\
         magicplayer.cpp
@@ -19,7 +20,7 @@ FORMS    += magicplayer.ui
 
 win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../../../../usr/lib/release/ -lvlc
 else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../../../../usr/lib/debug/ -lvlc
-else:unix:!symbian: LIBS += -L$$PWD/../../../../usr/lib/ -lvlc
+else:unix:!symbian: LIBS += -L/usr/lib/ -lvlc
 
-INCLUDEPATH += $$PWD/../../../../usr/include
-DEPENDPATH += $$PWD/../../../../usr/include
+INCLUDEPATH += /usr/include/
+DEPENDPATH += /usr/include/
