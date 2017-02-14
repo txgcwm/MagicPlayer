@@ -78,6 +78,7 @@ MagicPlayer::~MagicPlayer()
 
 void MagicPlayer::resizeEvent(QResizeEvent *event)
 {
+    (void) event;
     //ui->gridLayout->setGeometry(QRect(0,0,this->width(),this->height()));
     //event->accept();
 
@@ -292,6 +293,8 @@ void MagicPlayer::actionFullscreen(bool t)
 
 void MagicPlayer::actionFitWindow(bool t)
 {
+    (void) t;
+
     return;
 }
 
